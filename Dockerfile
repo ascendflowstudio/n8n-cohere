@@ -1,10 +1,10 @@
 FROM n8nio/n8n:1.45.1
 
-# Install LangChain nodes
-RUN npm install -g @n8n/n8n-nodes-langchain
+# Optional: install curl, git if debugging
+RUN apt-get update && apt-get install -y curl git
 
-# Expose default port
+# Install LangChain nodes safely
+RUN npm install -g --omit=dev --legacy-peer-deps @n8n/n8n-nodes-langchain
+
 EXPOSE 5678
-
-# Start n8n
 CMD ["n8n"]
