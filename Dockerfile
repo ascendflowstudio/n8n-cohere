@@ -1,14 +1,10 @@
-# Start from n8n base image
-FROM n8nio/n8n:latest
+FROM n8nio/n8n:1.45.1
 
-# Set to root to install packages
-USER root
-
-# Install custom nodes
+# Install LangChain nodes
 RUN npm install -g @n8n/n8n-nodes-langchain
 
-# Set correct ownership for installed modules (VERY IMPORTANT)
-RUN chown -R node:node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
+# Expose default port
+EXPOSE 5678
 
-# Back to node user
-USER node
+# Start n8n
+CMD ["n8n"]
