@@ -1,13 +1,14 @@
+# Start from n8n base image
 FROM n8nio/n8n:latest
 
+# Set to root to install packages
 USER root
 
-RUN mkdir -p /home/node/.n8n/custom
-WORKDIR /home/node/.n8n/custom
-RUN npm install @n8n/n8n-nodes-langchain
+# Install custom nodes
+RUN npm install -g @n8n/n8n-nodes-langchain
 
-ENV PORT=80
-EXPOSE 80
-HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -f http://localhost/ || exit 1
+# Set correct ownership for installed modules (VERY IMPORTANT)
+RUN chown -R node:node /usr/local/lib/node_modules /usr/local/bin /usr/local/share
 
+# Back to node user
 USER node
