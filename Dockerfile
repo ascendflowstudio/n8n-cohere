@@ -2,13 +2,15 @@ FROM n8nio/n8n:latest
 
 USER root
 
-# Create a folder for custom nodes
+# Install the Cohere LangChain node locally
 RUN mkdir -p /home/node/.n8n/custom
-
-# Set workdir and install locally
 WORKDIR /home/node/.n8n/custom
 RUN npm install @n8n/n8n-nodes-langchain
-HEALTHCHECK CMD curl --fail http://localhost:5678/ || exit 1
+
+# EXPOSE port so Railway knows what to check
+EXPOSE 5678
+
+# Add a working healthcheck
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD curl -f http://localhost:5678/ || exit 1
 
 USER node
-
